@@ -9,8 +9,8 @@ const NavMenu = ({ isNavOpen, toggleNav, user, defaultProfileImage }) => {
 
   const handleLogout = async () => {
     try {
-      await logout();
       toggleNav();
+      await logout();
       navigate("/login");
     } catch (error) {
       console.error("Logout failed:", error);
