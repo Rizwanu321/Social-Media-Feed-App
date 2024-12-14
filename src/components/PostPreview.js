@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -21,7 +21,6 @@ const PostPreview = () => {
 
   const [caption, setCaption] = useState("");
   const [uploading, setUploading] = useState(false);
-  const captionRef = useRef(null);
 
   const uploadFile = async (fileOrUrl) => {
     if (!user) {
@@ -111,7 +110,7 @@ const PostPreview = () => {
       const mediaUrls = await Promise.all(
         selectedFiles.map((fileOrUrl) => uploadFile(fileOrUrl))
       );
-
+      console.log(`caption: ${caption}:`);
       await addDoc(collection(db, "posts"), {
         ...userDetails,
         caption,
@@ -130,8 +129,7 @@ const PostPreview = () => {
   };
 
   const handleCaptionChange = (e) => {
-    const newCaption = e.target.innerText;
-    setCaption(newCaption);
+    setCaption(e.target.value);
   };
 
   if (loading) {
@@ -180,12 +178,12 @@ const PostPreview = () => {
       </div>
 
       <div className="relative w-[calc(100%-32px)] max-w-md mx-4 mt-4">
-        <input
-          ref={captionRef}
-          className="w-full border-b-2 border-gray-300 focus:outline-none"
-          onInput={handleCaptionChange}
+        <textarea
+          value={caption}
+          onChange={handleCaptionChange}
           placeholder="Write a caption..."
-          style={{ minHeight: "40px" }}
+          className="w-full border-b-2 border-gray-300 focus:outline-none p-2 resize-none"
+          row={2}
         />
       </div>
 
@@ -203,3 +201,4 @@ const PostPreview = () => {
 };
 
 export default PostPreview;
+
